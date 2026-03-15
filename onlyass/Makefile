@@ -1,26 +1,32 @@
 .PHONY: all clean
-CC= x86_64-w64-mingw32-gcc 
-LINK= -lkernel32
-NASM= nasm 
-FLAGS_NSM= -f win64
-source= hello.asm
-OBJCT= hello.obj
-program= hello.exe
 
-all:  print.exe  $(program) 
+# Build settings for Linux x86_64
+NASM = nasm
+NASM_FLAGS = -f elf64
+CC = gcc
+CFLAGS = -no-pie
 
-$(OBJCT): $(source)
-	$(NASM) $(FLAGS_NSM) $(source) -o $(OBJCT)
+HELLO_SRC = hello/hello.asm
+HELLO_OBJ = hello.o
+HELLO_BIN = hello.bin
 
-$(program):$(OBJCT)
-	$(CC) $(OBJCT)  -o $(program) $(FLAGS_NSM)
+PRINT_SRC = ../print/print.asm
+PRINT_OBJ = print.o
+PRINT_BIN = print
 
+all: $(HELLO_BIN) $(PRINT_BIN)
 
-print.obj: print.asm
-	nasm -f win64 print.asm -o print.obj
+$(HELLO_OBJ): $(HELLO_SRC)
+	$(NASM) $(NASM_FLAGS) $< -o $@
 
-print.exe: print.obj
-	gcc print.obj -o print.exe
+$(HELLO_BIN): $(HELLO_OBJ)
+	$(CC) $(CFLAGS) $< -o $@
+
+$(PRINT_OBJ): $(PRINT_SRC)
+	$(NASM) $(NASM_FLAGS) $< -o $@
+
+$(PRINT_BIN): $(PRINT_OBJ)
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm $(OBJCT) $(program)
+	rm -f $(HELLO_OBJ) $(HELLO_BIN) $(PRINT_OBJ) $(PRINT_BIN)
