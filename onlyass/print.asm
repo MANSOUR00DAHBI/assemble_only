@@ -1,5 +1,6 @@
 global main
 extern printf
+extern getchar
 
 section .data
 msg: db "Hello from pure Assembly!", 10, 0
@@ -11,4 +12,5 @@ main:
     mov rcx, msg
     call printf
     add rsp, 40
+    call getchar
     ret

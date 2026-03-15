@@ -1,6 +1,6 @@
 .PHONY: all clean
 CC= x86_64-w64-mingw32-gcc 
-LINK= -lkernel32
+LINK= - lkernel32
 NASM= nasm 
 FLAGS_NSM= -f win64
 source= hello.asm
@@ -13,7 +13,7 @@ $(OBJCT): $(source)
 	$(NASM) $(FLAGS_NSM) $(source) -o $(OBJCT)
 
 $(program):$(OBJCT)
-	$(CC) $(OBJCT)  -o $(program) $(FLAGS_NSM)
+	$(CC)  $(OBJCT)  -o $(program) 
 
 
 print.obj: print.asm
